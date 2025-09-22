@@ -81,12 +81,17 @@
 
     <div class="container mx-auto p-4 md:p-8 max-w-5xl">
         <!-- Cabeçalho -->
-        <header class="text-center mb-8 p-6 bg-blue-600 text-white rounded-2xl shadow-2xl border-4 border-blue-800 relative">
+        <header class="text-center mb-8 p-6 bg-blue-600 text-white rounded-2xl shadow-2xl border-4 border-blue-800 relative z-10">
             <h1 class="font-bangers text-5xl md:text-7xl tracking-wider" style="text-shadow: 3px 3px 0px #1e40af;">Guardiões da Rede</h1>
             <p class="font-semibold text-lg mt-2">A Trilha do Conhecimento para se tornar um Herói Digital!</p>
-            <button onclick="showSection('sobre')" class="absolute top-4 right-4 bg-teal-500 hover:bg-teal-600 text-white font-bold py-2 px-4 rounded-full shadow-lg transform hover:scale-105 transition-transform text-sm">
-                Sobre a Criadora
-            </button>
+            <div class="absolute top-4 right-4 flex flex-col sm:flex-row gap-2">
+                <button onclick="showSection('links-uteis')" class="bg-cyan-500 hover:bg-cyan-600 text-white font-bold py-2 px-4 rounded-full shadow-lg transform hover:scale-105 transition-transform text-sm">
+                    Links Úteis
+                </button>
+                <button onclick="showSection('sobre')" class="bg-teal-500 hover:bg-teal-600 text-white font-bold py-2 px-4 rounded-full shadow-lg transform hover:scale-105 transition-transform text-sm">
+                    Sobre a Criadora
+                </button>
+            </div>
         </header>
 
         <!-- Trilha do Conhecimento -->
@@ -110,7 +115,6 @@
             
             <section id="phishing" class="section">
                  <h2 class="font-bangers text-4xl text-red-600 mb-4">Etapa 1: O Anzol de Phishing</h2>
-                 <!-- Conteúdo do Phishing... -->
                  <div class="space-y-6">
                     <div>
                         <h3 class="font-bold text-xl mb-2 text-red-800">O Plano do Vilão:</h3>
@@ -127,7 +131,6 @@
                             <!-- Preenchido pelo JS -->
                         </div>
                         <div id="phishing-feedback" class="mt-4 p-4 rounded-lg text-center font-bold text-lg hidden"></div>
-                        <!-- Gemini Phishing Analyzer -->
                         <div class="mt-8 pt-6 border-t-2 border-dashed border-red-300">
                              <h3 class="font-bangers text-3xl text-red-700 text-center">✨ Detector de Ameaças ✨</h3>
                             <p class="text-center my-2">Tem outra mensagem suspeita? Cole o texto abaixo e deixe que o Guardião Mestre (IA) analise para você!</p>
@@ -148,7 +151,6 @@
 
             <section id="senhas" class="section">
                 <h2 class="font-bangers text-4xl text-green-600 mb-4">Etapa 2: O Desafio da Senha Forte</h2>
-                <!-- Conteúdo de Senhas... -->
                 <div class="space-y-6">
                     <div>
                         <h3 class="font-bold text-xl mb-2 text-red-800">O Plano do Vilão:</h3>
@@ -177,7 +179,6 @@
 
             <section id="updates" class="section">
                 <h2 class="font-bangers text-4xl text-purple-600 mb-4">Etapa 3: O Perigo das Botas Desatualizadas</h2>
-                <!-- Conteúdo de Updates... -->
                  <div class="space-y-6">
                     <div>
                         <h3 class="font-bold text-xl mb-2 text-red-800">O Plano do Vilão:</h3>
@@ -211,7 +212,6 @@
 
             <section id="nuvem" class="section">
                  <h2 class="font-bangers text-4xl text-sky-600 mb-4">Etapa 4: Protegendo a Nuvem e o Poder do 2FA</h2>
-                <!-- Conteúdo de Nuvem e 2FA... -->
                 <div class="space-y-6">
                     <div>
                         <h3 class="font-bold text-xl mb-2 text-red-800">O Plano do Vilão:</h3>
@@ -248,11 +248,9 @@
                  <p class="text-lg">Agora você sabe como se proteger contra phishing, criar senhas fortes, a importância das atualizações e como manter seus arquivos seguros na nuvem.</p>
                  <p class="mt-6 font-bold text-xl text-blue-800">Continue usando seus novos poderes para manter o mundo digital um lugar seguro para todos!</p>
                  
-                 <!-- Missão Final com Link para o Jogo -->
                  <div class="mt-8 p-6 bg-blue-50 border-2 border-dashed border-blue-300 rounded-lg">
                     <h3 class="font-bangers text-3xl text-blue-800">Missão Final!</h3>
                     <p class="mt-2 mb-4">Agora que você aprendeu as técnicas dos Guardiões, teste suas habilidades no nosso jogo interativo!</p>
-                    <!-- IMPORTANTE: Altere "seu_jogo.html" para o nome do seu arquivo de jogo -->
                     <a href="missao_ciber_estrelar.html" class="inline-block bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-8 rounded-full shadow-lg transform hover:scale-105 transition-transform text-xl">
                         Jogar o Desafio!
                     </a>
@@ -264,8 +262,38 @@
             </section>
 
             <section id="sobre" class="section">
-                <!-- Conteúdo Sobre a Criadora -->
+                <h2 class="font-bangers text-4xl text-teal-600 mb-4 text-center">Sobre a Criadora</h2>
+                <div class="p-6 bg-teal-50 border-2 border-teal-200 rounded-lg text-left shadow-inner space-y-4">
+                    <p class="text-lg text-gray-800">Olá! Sou a criadora por trás do "Guardiões da Rede". Minha paixão por tecnologia começou a tomar forma no ensino médio, no <strong>IFAL</strong>, onde percebi como a programação pode criar soluções incríveis para o dia a dia. Essa descoberta me motivou a seguir carreira na área, ingressando na faculdade de <strong>Análise e Desenvolvimento de Sistemas (ADS)</strong>.</p>
+                    <p class="text-lg text-gray-800">A ideia deste projeto nasceu da vontade de unir duas coisas que considero essenciais: educação e tecnologia. Percebi que muitos amigos e familiares mais jovens não conheciam os perigos online, como o phishing e as senhas fracas. Por isso, decidi criar uma ferramenta que ensinasse sobre cibersegurança de um jeito leve e divertido, como um jogo de heróis.</p>
+                    <p class="text-lg text-gray-800">Minha jornada educacional, que começou lá na <strong>Escola Exemplo</strong>, me deu a base para tudo isso. Agora, meu objetivo é usar o que aprendo na faculdade para criar ferramentas que ajudem as pessoas a usarem a internet de forma mais segura e consciente. Espero que você se divirta e aprenda muito!</p>
+                </div>
+                <div class="mt-6 text-center">
+                    <button onclick="showLastTrailSection()" class="bg-teal-500 hover:bg-teal-600 text-white font-bold py-2 px-6 rounded-full shadow-lg">Voltar para a Trilha</button>
+                </div>
             </section>
+
+            <section id="links-uteis" class="section">
+                <h2 class="font-bangers text-4xl text-cyan-600 mb-4 text-center">Links Úteis</h2>
+                <div class="p-6 bg-cyan-50 border-2 border-cyan-200 rounded-lg text-left shadow-inner space-y-6">
+                    <p class="text-lg">Quer aprender ainda mais sobre segurança na internet? Confira estes sites confiáveis:</p>
+                    <ul class="list-disc list-inside space-y-4">
+                        <li>
+                            <strong><a href="https://www.virustotal.com/" target="_blank" class="text-cyan-700 hover:underline">VirusTotal</a>:</strong> Uma ferramenta online gratuita que analisa arquivos e URLs suspeitas para detectar vírus e outras ameaças.
+                        </li>
+                        <li>
+                            <strong><a href="https://cartilha.cert.br/" target="_blank" class="text-cyan-700 hover:underline">Cartilha de Segurança para Internet</a>:</strong> Um guia completo do Comitê Gestor da Internet no Brasil (CGI.br) com dicas para todas as idades.
+                        </li>
+                        <li>
+                            <strong><a href="https://internetsegura.br/" target="_blank" class="text-cyan-700 hover:underline">Portal Internet Segura</a>:</strong> Outra iniciativa do CGI.br com jogos, vídeos e guias para pais, educadores e crianças.
+                        </li>
+                    </ul>
+                </div>
+                <div class="mt-6 text-center">
+                    <button onclick="showLastTrailSection()" class="bg-cyan-500 hover:bg-cyan-600 text-white font-bold py-2 px-6 rounded-full shadow-lg">Voltar para a Trilha</button>
+                </div>
+            </section>
+
         </main>
 
         <footer class="text-center mt-8 p-6 bg-blue-900 text-yellow-300 rounded-2xl shadow-lg">
@@ -284,12 +312,12 @@
         { id: 'nuvem', name: 'Nuvem', icon: `<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 15a4 4 0 004 4h9a5 5 0 10-.1-9.999 5.002 5.002 0 10-9.78 2.096A4.001 4.001 0 003 15z"></path></svg>`, color: 'sky' },
         { id: 'conclusao', name: 'Final', icon: `<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>`, color: 'gray' },
     ];
-    const sections = document.querySelectorAll('.section');
+    const sections = document.querySelectorAll('#content > .section');
+    const trailContainer = document.getElementById('knowledge-trail');
     let currentStep = 0;
     let lastTrailSectionId = 'inicio';
 
     function buildTrail() {
-        const trailContainer = document.getElementById('knowledge-trail');
         let trailHTML = '<div class="flex items-center justify-between">';
         trailData.forEach((step, index) => {
             const isLast = index === trailData.length - 1;
@@ -307,10 +335,19 @@
     }
 
     function showSection(sectionId) {
+        const isOverlaySection = sectionId === 'sobre' || sectionId === 'links-uteis';
+        
+        trailContainer.style.display = isOverlaySection ? 'none' : 'block';
         sections.forEach(section => section.classList.toggle('active', section.id === sectionId));
-        if (trailData.some(step => step.id === sectionId)) {
+
+        if (!isOverlaySection) {
             lastTrailSectionId = sectionId;
         }
+        window.scrollTo(0, 0);
+    }
+
+    function showLastTrailSection() {
+        showSection(lastTrailSectionId);
     }
 
     function updateTrailUI() {
@@ -331,7 +368,6 @@
     function showCurrentStep() {
         showSection(trailData[currentStep].id);
         updateTrailUI();
-        window.scrollTo(0, 0);
     }
 
     function nextStep() {
@@ -353,10 +389,6 @@
     function restartTrail() {
         currentStep = 0;
         showCurrentStep();
-    }
-    
-    function closeAbout() {
-        showSection(lastTrailSectionId);
     }
 
     // --- GEMINI API CALL ---
@@ -388,17 +420,6 @@
             <p class="my-2 text-red-600 font-bold">Mas seja rápido! A oferta expira em 1 hora!</p>
             <p>Para resgatar, clique no link abaixo e confirme seus dados (login e senha).</p>
             <a href="#" onclick="handlePhishingClick(event)" class="text-blue-600 underline break-all">www.jogosuperlegal-resgatar-agora.biz/login</a>
-        `;
-        document.getElementById('sobre').innerHTML = `
-             <h2 class="font-bangers text-4xl text-teal-600 mb-4 text-center">Sobre a Criadora</h2>
-             <div class="p-6 bg-teal-50 border-2 border-teal-200 rounded-lg text-left shadow-inner space-y-4">
-                <p class="text-lg text-gray-800">Olá! Sou a criadora por trás do "Guardiões da Rede". Minha paixão por tecnologia começou a tomar forma no ensino médio, no <strong>IFAL</strong>, onde percebi como a programação pode criar soluções incríveis para o dia a dia. Essa descoberta me motivou a seguir carreira na área, ingressando na faculdade de <strong>Análise e Desenvolvimento de Sistemas (ADS)</strong>.</p>
-                <p class="text-lg text-gray-800">A ideia deste projeto nasceu da vontade de unir duas coisas que considero essenciais: educação e tecnologia. Percebi que muitos amigos e familiares mais jovens não conheciam os perigos online, como o phishing e as senhas fracas. Por isso, decidi criar uma ferramenta que ensinasse sobre cibersegurança de um jeito leve e divertido, como um jogo de heróis.</p>
-                <p class="text-lg text-gray-800">Minha jornada educacional, que começou lá na <strong>Escola Exemplo</strong>, me deu a base para tudo isso. Agora, meu objetivo é usar o que aprendo na faculdade para criar ferramentas que ajudem as pessoas a usarem a internet de forma mais segura e consciente. Espero que você se divirta e aprenda muito!</p>
-             </div>
-             <div class="mt-6 text-center">
-                <button onclick="closeAbout()" class="bg-teal-500 hover:bg-teal-600 text-white font-bold py-2 px-6 rounded-full shadow-lg">Voltar para a Trilha</button>
-            </div>
         `;
         document.getElementById('verifier-hero').innerHTML = `
             <svg class="w-24 h-24 text-sky-500 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
@@ -491,4 +512,5 @@
     </script>
 </body>
 </html>
+
 
