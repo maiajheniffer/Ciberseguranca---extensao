@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guardiões da Rede: A Trilha do Conhecimento</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bangers&family=Inter:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            scroll-behavior: smooth;
+        }
+        .font-bangers {
+            font-family: 'Bangers', cursive;
+        }
+        .section {
+            display: none;
+            animation: fadeIn 0.5s ease-in-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .section.active {
+            display: block;
+        }
+        /* Estilos da Trilha */
+        .trail-step {
+            transition: all 0.3s ease;
+            filter: grayscale(80%);
+            opacity: 0.6;
+        }
+        .trail-step.active {
+            transform: scale(1.1);
+            filter: grayscale(0%);
+            opacity: 1;
+            border-color: #f59e0b;
+        }
+        .trail-step.completed {
+            filter: grayscale(0%);
+            opacity: 1;
+            background-color: #16a34a;
+            color: white;
+            border-color: #15803d;
+        }
+        .trail-line {
+            height: 4px;
+            background-color: #d1d5db;
+            flex: 1;
+            transition: background-color 0.5s ease;
+        }
+        .trail-line.completed {
+            background-color: #16a34a;
+        }
+        /* Estilos do Quiz */
+        .quiz-option:hover:not(:disabled) {
+            transform: scale(1.05);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+        .correct { background-color: #22c55e !important; color: white; border-color: #16a34a !important; }
+        .incorrect { background-color: #ef4444 !important; color: white; border-color: #dc2626 !important; }
+        .loader {
+            border: 4px solid #f3f3f3;
+            border-radius: 50%;
+            border-top: 4px solid #3498db;
+            width: 30px;
+            height: 30px;
+            animation: spin 1s linear infinite;
+            margin: 1rem auto;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body class="bg-gray-100 text-gray-800">
+
+    <div class="container mx-auto p-4 md:p-8 max-w-5xl">
+        <!-- Cabeçalho -->
+        <header class="text-center mb-8 p-6 bg-blue-600 text-white rounded-2xl shadow-2xl border-4 border-blue-800 relative">
+            <h1 class="font-bangers text-5xl md:text-7xl tracking-wider" style="text-shadow: 3px 3px 0px #1e40af;">Guardiões da Rede</h1>
+            <p class="font-semibold text-lg mt-2">A Trilha do Conhecimento para se tornar um Herói Digital!</p>
+            <button onclick="showSection('sobre')" class="absolute top-4 right-4 bg-teal-500 hover:bg-teal-600 text-white font-bold py-2 px-4 rounded-full shadow-lg transform hover:scale-105 transition-transform text-sm">
+                Sobre a Criadora
+            </button>
+        </header>
+
+        <!-- Trilha do Conhecimento -->
+        <div id="knowledge-trail" class="mb-8 p-4 bg-white rounded-lg shadow-md">
+            <!-- A trilha será preenchida pelo JS -->
+        </div>
+
+        <main id="content" class="bg-white p-6 md:p-8 rounded-2xl shadow-xl border-2 border-gray-200 min-h-[400px]">
+            <!-- SEÇÕES DA TRILHA -->
+            <section id="inicio" class="section active text-center">
+                <h2 class="font-bangers text-4xl text-blue-700 mb-4">Prepare-se para a Jornada!</h2>
+                <div class="flex justify-center mb-6">
+                    <svg class="w-32 h-32 text-yellow-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path></svg>
+                </div>
+                <p class="text-lg mb-4">Bem-vindo, futuro Guardião! Sua missão é seguir a Trilha do Conhecimento para aprender a se defender do vilão <strong>Vírus Vândalo</strong> e seus truques.</p>
+                <p class="text-lg">Complete cada etapa para se tornar um mestre da segurança digital!</p>
+                <div class="mt-8">
+                     <button onclick="nextStep()" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-8 rounded-full shadow-lg transform hover:scale-105 transition-transform text-xl">Iniciar a Trilha!</button>
+                </div>
+            </section>
+            
+            <section id="phishing" class="section">
+                 <h2 class="font-bangers text-4xl text-red-600 mb-4">Etapa 1: O Anzol de Phishing</h2>
+                 <!-- Conteúdo do Phishing... -->
+                 <div class="space-y-6">
+                    <div>
+                        <h3 class="font-bold text-xl mb-2 text-red-800">O Plano do Vilão:</h3>
+                        <p>O Vírus Vândalo adora pescar! Mas em vez de peixes, ele tenta pescar suas informações com o <strong>"Anzol de Phishing"</strong>. Ele envia e-mails e mensagens falsas que parecem ser de empresas ou jogos famosos. O objetivo é te enganar para que você clique em links perigosos e entregue suas senhas de bandeja!</p>
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-xl mb-2 text-green-800">O Escudo do Guardião:</h3>
+                        <p>Seu superpoder aqui é a <strong>desconfiança</strong>! Um verdadeiro Guardião da Rede sempre analisa as mensagens com cuidado. Verifique o endereço de e-mail, procure erros de português e desconfie de ofertas "boas demais para ser verdade" ou que pedem uma ação urgente.</p>
+                    </div>
+                    <div class="p-4 border-2 border-dashed border-gray-300 rounded-lg">
+                        <h3 class="font-bold text-xl mb-2 text-yellow-800 text-center">Sua Missão: Analisar a Evidência</h3>
+                        <p class="text-center mb-4">Abaixo está um e-mail falso enviado pelo Vírus Vândalo. Veja se consegue identificar os sinais de perigo.</p>
+                        <div class="border-2 border-gray-300 rounded-lg p-4 bg-gray-50" id="phishing-email-content">
+                            <!-- Preenchido pelo JS -->
+                        </div>
+                        <div id="phishing-feedback" class="mt-4 p-4 rounded-lg text-center font-bold text-lg hidden"></div>
+                        <!-- Gemini Phishing Analyzer -->
+                        <div class="mt-8 pt-6 border-t-2 border-dashed border-red-300">
+                             <h3 class="font-bangers text-3xl text-red-700 text-center">✨ Detector de Ameaças ✨</h3>
+                            <p class="text-center my-2">Tem outra mensagem suspeita? Cole o texto abaixo e deixe que o Guardião Mestre (IA) analise para você!</p>
+                            <textarea id="phishing-input" class="w-full p-2 border-2 border-gray-300 rounded-lg mt-2" rows="4" placeholder="Cole o texto suspeito aqui..."></textarea>
+                            <div class="text-center mt-4">
+                                <button onclick="analyzeEmail()" class="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-6 rounded-full shadow-lg transform hover:scale-105 transition-transform">Analisar Texto</button>
+                            </div>
+                            <div id="phishing-loader" class="loader hidden"></div>
+                            <div id="phishing-analysis-result" class="mt-4 p-4 rounded-lg bg-red-50 border border-red-200 hidden"></div>
+                        </div>
+                    </div>
+                 </div>
+                 <div class="mt-8 flex justify-center items-center gap-4">
+                     <button onclick="previousStep()" class="bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-6 rounded-full shadow-lg">Voltar</button>
+                     <button onclick="nextStep()" class="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-6 rounded-full shadow-lg">Continuar Trilha</button>
+                </div>
+            </section>
+
+            <section id="senhas" class="section">
+                <h2 class="font-bangers text-4xl text-green-600 mb-4">Etapa 2: O Desafio da Senha Forte</h2>
+                <!-- Conteúdo de Senhas... -->
+                <div class="space-y-6">
+                    <div>
+                        <h3 class="font-bold text-xl mb-2 text-red-800">O Plano do Vilão:</h3>
+                        <p>O Vírus Vândalo tem um programa que testa milhares de senhas por segundo! Ele adora senhas fracas como "123456", "senha" ou o nome do seu cachorro. Para ele, adivinhar essas senhas é mais fácil que tirar doce de criança.</p>
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-xl mb-2 text-green-800">O Escudo do Guardião:</h3>
+                        <p>Uma <strong>senha forte</strong> é como um cofre de titânio! Ela deve ser longa (mais de 12 caracteres) e misturar letras maiúsculas, minúsculas, números e símbolos (#, @, !, ?). Uma boa dica é criar uma frase e transformá-la em senha, como "Eu adoro comer pizza em 2025!" que pode virar "E@cp_3m2025!".</p>
+                    </div>
+                    <div class="p-4 border-2 border-dashed border-gray-300 rounded-lg">
+                         <h3 class="font-bold text-xl mb-2 text-yellow-800 text-center">Sua Missão: Testar seu Conhecimento</h3>
+                        <div id="password-quiz"></div>
+                        <div id="password-feedback" class="mt-4 p-4 rounded-lg text-center font-bold text-lg hidden"></div>
+                        <div id="gemini-password-tip" class="mt-4 p-4 rounded-lg bg-green-50 border border-green-200 hidden"></div>
+                        <div class="text-center mt-4 flex justify-center items-center gap-4">
+                           <button onclick="getPasswordTip()" class="bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-2 px-6 rounded-full shadow-lg transform hover:scale-105 transition-transform hidden" id="gemini-tip-btn">✨ Dica do Mestre</button>
+                           <button onclick="nextPasswordQuestion()" class="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-6 rounded-full shadow-lg transform hover:scale-105 transition-transform hidden" id="next-password-btn">Próxima</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="mt-8 flex justify-center items-center gap-4">
+                     <button onclick="previousStep()" class="bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-6 rounded-full shadow-lg">Voltar</button>
+                     <button onclick="nextStep()" id="password-continue-btn" class="hidden bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-6 rounded-full shadow-lg">Continuar Trilha</button>
+                </div>
+            </section>
+
+            <section id="updates" class="section">
+                <h2 class="font-bangers text-4xl text-purple-600 mb-4">Etapa 3: O Perigo das Botas Desatualizadas</h2>
+                <!-- Conteúdo de Updates... -->
+                 <div class="space-y-6">
+                    <div>
+                        <h3 class="font-bold text-xl mb-2 text-red-800">O Plano do Vilão:</h3>
+                        <p>O Vírus Vândalo é um oportunista! Ele procura por "buracos" em programas, jogos e aplicativos que não foram atualizados. Essas falhas de segurança, que ele chama de <strong>"Botas Desatualizadas"</strong>, são portões abertos para ele invadir seus dispositivos.</p>
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-xl mb-2 text-green-800">O Escudo do Guardião:</h3>
+                        <p>O <strong>Mago da Atualização</strong> é seu melhor amigo aqui! Manter tudo atualizado é como consertar os buracos da sua armadura. As atualizações de segurança corrigem as falhas e fecham as portas na cara do Vírus Vândalo. Sempre que ver um aviso de atualização, não ignore!</p>
+                    </div>
+                    <div class="p-4 border-2 border-dashed border-gray-300 rounded-lg">
+                        <h3 class="font-bold text-xl mb-2 text-yellow-800 text-center">Sua Missão: Simular uma Atualização</h3>
+                        <div id="update-simulation" class="max-w-md mx-auto bg-gray-800 text-white p-6 rounded-lg shadow-lg">
+                            <div class="flex items-center mb-4">
+                                <img src="https://placehold.co/64x64/7e22ce/ffffff?text=SJ" alt="Ícone do Super Jogo" class="rounded-lg">
+                                <div class="ml-4">
+                                    <h4 class="font-bold text-lg">Super Jogo Online</h4>
+                                    <p class="text-sm text-gray-400">Versão 1.2</p>
+                                </div>
+                            </div>
+                            <p class="text-sm mb-4"><strong>Novidades:</strong> Corrigida uma falha de segurança crítica que permitia o acesso de vilões. Novos itens na loja!</p>
+                            <button id="update-btn" onclick="runUpdate()" class="w-full bg-blue-500 hover:bg-blue-600 font-bold py-2 rounded-lg transition-colors">Atualizar Agora!</button>
+                            <div id="update-feedback" class="text-center mt-4 font-bold text-green-400 hidden"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="mt-8 flex justify-center items-center gap-4">
+                     <button onclick="previousStep()" class="bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-6 rounded-full shadow-lg">Voltar</button>
+                     <button onclick="nextStep()" class="bg-purple-500 hover:bg-purple-600 text-white font-bold py-2 px-6 rounded-full shadow-lg">Continuar Trilha</button>
+                </div>
+            </section>
+
+            <section id="nuvem" class="section">
+                 <h2 class="font-bangers text-4xl text-sky-600 mb-4">Etapa 4: Protegendo a Nuvem e o Poder do 2FA</h2>
+                <!-- Conteúdo de Nuvem e 2FA... -->
+                <div class="space-y-6">
+                    <div>
+                        <h3 class="font-bold text-xl mb-2 text-red-800">O Plano do Vilão:</h3>
+                        <p>A "nuvem" (como Google Drive ou iCloud) é onde você guarda seus tesouros digitais: fotos, trabalhos, jogos salvos. O Vírus Vândalo tenta invadir sua nuvem para roubar ou apagar tudo, principalmente se seus arquivos estiverem públicos ou se sua conta tiver apenas uma senha fraca.</p>
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-xl mb-2 text-green-800">O Escudo do Guardião:</h3>
+                        <p>Além de senhas fortes e de nunca deixar arquivos importantes como "públicos", seu maior poder aqui é o <strong>"Verificador (2FA)"</strong>! A Autenticação de Dois Fatores (2FA) exige um segundo código (que chega no seu celular) para entrar na conta. Mesmo que o vilão roube sua senha, ele não consegue passar por essa segunda barreira!</p>
+                    </div>
+                    <div class="p-4 border-2 border-dashed border-gray-300 rounded-lg">
+                        <h3 class="font-bold text-xl mb-2 text-yellow-800 text-center">Sua Missão: Quiz da Nuvem Segura</h3>
+                        <div id="cloud-quiz"></div>
+                        <div id="cloud-feedback" class="mt-4 p-4 rounded-lg text-center font-bold text-lg hidden"></div>
+                        <div class="text-center mt-4">
+                            <button onclick="nextCloudQuestion()" class="bg-sky-500 hover:bg-sky-600 text-white font-bold py-2 px-6 rounded-full shadow-lg transform hover:scale-105 transition-transform hidden" id="next-cloud-btn">Próxima</button>
+                        </div>
+                        <div id="verifier-hero" class="mt-8 p-6 bg-sky-100 border-2 border-sky-400 rounded-2xl text-center opacity-0 transition-opacity duration-500">
+                             <!-- Conteúdo do Herói Verificador -->
+                        </div>
+                    </div>
+                </div>
+                <div class="mt-8 flex justify-center items-center gap-4">
+                     <button onclick="previousStep()" class="bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-6 rounded-full shadow-lg">Voltar</button>
+                     <button onclick="nextStep()" id="cloud-continue-btn" class="hidden bg-sky-500 hover:bg-sky-600 text-white font-bold py-2 px-6 rounded-full shadow-lg">Continuar Trilha</button>
+                </div>
+            </section>
+            
+            <section id="conclusao" class="section text-center">
+                <h2 class="font-bangers text-5xl text-yellow-500 mb-4" style="text-shadow: 2px 2px 0px #a16207;">Parabéns, Guardião!</h2>
+                 <div class="flex justify-center mb-6">
+                    <svg class="w-40 h-40 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                 </div>
+                 <p class="text-2xl font-semibold mb-4">Você completou a Trilha do Conhecimento com sucesso!</p>
+                 <p class="text-lg">Agora você sabe como se proteger contra phishing, criar senhas fortes, a importância das atualizações e como manter seus arquivos seguros na nuvem.</p>
+                 <p class="mt-6 font-bold text-xl text-blue-800">Continue usando seus novos poderes para manter o mundo digital um lugar seguro para todos!</p>
+                 
+                 <!-- Missão Final com Link para o Jogo -->
+                 <div class="mt-8 p-6 bg-blue-50 border-2 border-dashed border-blue-300 rounded-lg">
+                    <h3 class="font-bangers text-3xl text-blue-800">Missão Final!</h3>
+                    <p class="mt-2 mb-4">Agora que você aprendeu as técnicas dos Guardiões, teste suas habilidades no nosso jogo interativo!</p>
+                    <!-- IMPORTANTE: Altere "seu_jogo.html" para o nome do seu arquivo de jogo -->
+                    <a href="missao_ciber_estrelar.html" class="inline-block bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-8 rounded-full shadow-lg transform hover:scale-105 transition-transform text-xl">
+                        Jogar o Desafio!
+                    </a>
+                 </div>
+
+                  <div class="mt-8">
+                     <button onclick="restartTrail()" class="bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-3 px-8 rounded-full shadow-lg transform hover:scale-105 transition-transform">Refazer a Trilha</button>
+                </div>
+            </section>
+
+            <section id="sobre" class="section">
+                <!-- Conteúdo Sobre a Criadora -->
+            </section>
+        </main>
+
+        <footer class="text-center mt-8 p-6 bg-blue-900 text-yellow-300 rounded-2xl shadow-lg">
+             <h3 class="font-bangers text-3xl">Lembre-se do lema do Guardião:</h3>
+             <p class="text-2xl font-bold mt-2">"Pense antes de clicar!"</p>
+        </footer>
+    </div>
+
+    <script>
+    // --- LÓGICA DA TRILHA E NAVEGAÇÃO ---
+    const trailData = [
+        { id: 'inicio', name: 'Início', icon: `<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>`, color: 'yellow' },
+        { id: 'phishing', name: 'Phishing', icon: `<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>`, color: 'red' },
+        { id: 'senhas', name: 'Senhas', icon: `<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>`, color: 'green' },
+        { id: 'updates', name: 'Updates', icon: `<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>`, color: 'purple' },
+        { id: 'nuvem', name: 'Nuvem', icon: `<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 15a4 4 0 004 4h9a5 5 0 10-.1-9.999 5.002 5.002 0 10-9.78 2.096A4.001 4.001 0 003 15z"></path></svg>`, color: 'sky' },
+        { id: 'conclusao', name: 'Final', icon: `<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>`, color: 'gray' },
+    ];
+    const sections = document.querySelectorAll('.section');
+    let currentStep = 0;
+    let lastTrailSectionId = 'inicio';
+
+    function buildTrail() {
+        const trailContainer = document.getElementById('knowledge-trail');
+        let trailHTML = '<div class="flex items-center justify-between">';
+        trailData.forEach((step, index) => {
+            const isLast = index === trailData.length - 1;
+            const colorClasses = { yellow: 'bg-yellow-400 text-yellow-900', red: 'bg-red-500 text-white', green: 'bg-green-500 text-white', purple: 'bg-purple-500 text-white', sky: 'bg-sky-500 text-white', gray: 'bg-gray-700 text-white' };
+            trailHTML += `
+                <div id="step-${index}" class="trail-step flex flex-col items-center text-center w-20">
+                    <div class="${colorClasses[step.color]} p-3 rounded-full border-4 border-transparent">${step.icon}</div>
+                    <span class="text-xs font-bold mt-1">${step.name}</span>
+                </div>
+                ${!isLast ? `<div id="line-${index}" class="trail-line"></div>` : ''}
+            `;
+        });
+        trailHTML += '</div>';
+        trailContainer.innerHTML = trailHTML;
+    }
+
+    function showSection(sectionId) {
+        sections.forEach(section => section.classList.toggle('active', section.id === sectionId));
+        if (trailData.some(step => step.id === sectionId)) {
+            lastTrailSectionId = sectionId;
+        }
+    }
+
+    function updateTrailUI() {
+        trailData.forEach((step, i) => {
+            const stepEl = document.getElementById(`step-${i}`);
+            const lineEl = document.getElementById(`line-${i - 1}`);
+            stepEl.classList.remove('active', 'completed');
+            if (lineEl) lineEl.classList.remove('completed');
+            if (i < currentStep) {
+                stepEl.classList.add('completed');
+                if (lineEl) lineEl.classList.add('completed');
+            } else if (i === currentStep) {
+                stepEl.classList.add('active');
+            }
+        });
+    }
+
+    function showCurrentStep() {
+        showSection(trailData[currentStep].id);
+        updateTrailUI();
+        window.scrollTo(0, 0);
+    }
+
+    function nextStep() {
+        if (currentStep < trailData.length - 1) {
+            currentStep++;
+            showCurrentStep();
+            if (trailData[currentStep].id === 'senhas') startPasswordQuiz();
+            if (trailData[currentStep].id === 'nuvem') startCloudQuiz();
+        }
+    }
+    
+    function previousStep() {
+        if (currentStep > 0) {
+            currentStep--;
+            showCurrentStep();
+        }
+    }
+
+    function restartTrail() {
+        currentStep = 0;
+        showCurrentStep();
+    }
+    
+    function closeAbout() {
+        showSection(lastTrailSectionId);
+    }
+
+    // --- GEMINI API CALL ---
+    const apiKey = "";
+    const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-05-20:generateContent?key=${apiKey}`;
+
+    async function geminiApiCall(prompt) {
+        const payload = { contents: [{ parts: [{ text: prompt }] }] };
+        try {
+            const response = await fetch(apiUrl, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
+            if (!response.ok) {
+                throw new Error(`API Error: ${response.status}`);
+            }
+            const data = await response.json();
+            return data.candidates[0].content.parts[0].text;
+        } catch (error) {
+            console.error("Gemini API call failed:", error);
+            return "Oops! O Guardião Mestre está meditando. Tente novamente mais tarde.";
+        }
+    }
+
+    // --- CONTEÚDO DINÂMICO ---
+    function populateContent() {
+        document.getElementById('phishing-email-content').innerHTML = `
+            <p><strong>De:</strong> JogoSuperLegal@promo-premio.com <span class="text-red-600 font-bold ml-2">(Endereço suspeito!)</span></p>
+            <p><strong>Assunto:</strong> PARABÉNS! Você ganhou um prêmio incrível!</p><hr class="my-2">
+            <p>Olá jogador,</p>
+            <p class="my-2">Detectamos que você é um dos nossos melhores jogadores! Como recompensa, você ganhou 10.000 moedas de ouro e uma skin exclusiva!</p>
+            <p class="my-2 text-red-600 font-bold">Mas seja rápido! A oferta expira em 1 hora!</p>
+            <p>Para resgatar, clique no link abaixo e confirme seus dados (login e senha).</p>
+            <a href="#" onclick="handlePhishingClick(event)" class="text-blue-600 underline break-all">www.jogosuperlegal-resgatar-agora.biz/login</a>
+        `;
+        document.getElementById('sobre').innerHTML = `
+             <h2 class="font-bangers text-4xl text-teal-600 mb-4 text-center">Sobre a Criadora</h2>
+             <div class="p-6 bg-teal-50 border-2 border-teal-200 rounded-lg text-left shadow-inner space-y-4">
+                <p class="text-lg text-gray-800">Olá! Sou a criadora por trás do "Guardiões da Rede". Minha paixão por tecnologia começou a tomar forma no ensino médio, no <strong>IFAL</strong>, onde percebi como a programação pode criar soluções incríveis para o dia a dia. Essa descoberta me motivou a seguir carreira na área, ingressando na faculdade de <strong>Análise e Desenvolvimento de Sistemas (ADS)</strong>.</p>
+                <p class="text-lg text-gray-800">A ideia deste projeto nasceu da vontade de unir duas coisas que considero essenciais: educação e tecnologia. Percebi que muitos amigos e familiares mais jovens não conheciam os perigos online, como o phishing e as senhas fracas. Por isso, decidi criar uma ferramenta que ensinasse sobre cibersegurança de um jeito leve e divertido, como um jogo de heróis.</p>
+                <p class="text-lg text-gray-800">Minha jornada educacional, que começou lá na <strong>Escola Exemplo</strong>, me deu a base para tudo isso. Agora, meu objetivo é usar o que aprendo na faculdade para criar ferramentas que ajudem as pessoas a usarem a internet de forma mais segura e consciente. Espero que você se divirta e aprenda muito!</p>
+             </div>
+             <div class="mt-6 text-center">
+                <button onclick="closeAbout()" class="bg-teal-500 hover:bg-teal-600 text-white font-bold py-2 px-6 rounded-full shadow-lg">Voltar para a Trilha</button>
+            </div>
+        `;
+        document.getElementById('verifier-hero').innerHTML = `
+            <svg class="w-24 h-24 text-sky-500 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
+            <h3 class="font-bangers text-3xl text-sky-700">Herói: O Verificador (2FA)</h3>
+            <p class="mt-2">A <strong>Autenticação de Dois Fatores (2FA)</strong> é um superpoder! Mesmo que o vilão roube sua senha, ele não consegue entrar na sua conta, pois precisaria de um segundo código, que só você tem. É uma camada extra de proteção!</p>
+        `;
+    }
+
+    // --- LÓGICA DAS SEÇÕES INTERATIVAS ---
+    // Phishing
+    function handlePhishingClick(event) { event.preventDefault(); const feedbackEl = document.getElementById('phishing-feedback'); feedbackEl.innerHTML = 'ISSO AÍ! Você pensou antes de clicar. Links suspeitos não devem ser abertos. Missão cumprida!'; feedbackEl.className = 'mt-4 p-4 rounded-lg text-center font-bold text-lg bg-green-200 text-green-800 block'; }
+    async function analyzeEmail() { const input = document.getElementById('phishing-input').value; const loader = document.getElementById('phishing-loader'); const resultDiv = document.getElementById('phishing-analysis-result'); if (!input) { resultDiv.innerHTML = 'Por favor, insira um texto para analisar.'; resultDiv.classList.remove('hidden'); return; } loader.classList.remove('hidden'); resultDiv.classList.add('hidden'); const prompt = `Aja como um especialista em cibersegurança. Analise o seguinte texto e identifique possíveis sinais de phishing. Seja direto, use uma linguagem simples e use emojis. Texto: "${input}"`; const analysis = await geminiApiCall(prompt); loader.classList.add('hidden'); resultDiv.innerHTML = analysis.replace(/\n/g, '<br>'); resultDiv.classList.remove('hidden'); }
+
+    // Updates
+    function runUpdate() { const btn = document.getElementById('update-btn'); const feedback = document.getElementById('update-feedback'); btn.disabled = true; btn.innerHTML = 'Atualizando...'; btn.classList.replace('bg-blue-500', 'bg-gray-500'); setTimeout(() => { btn.classList.replace('bg-gray-500', 'bg-green-600'); btn.innerHTML = 'Atualizado com Sucesso!'; feedback.innerHTML = 'Ótimo trabalho! Você fechou a porta para o vilão!'; feedback.classList.remove('hidden'); }, 1500); }
+    
+    // Senhas
+    const passwordQuestions = [ { password: "password123", isStrong: false, explanation: "Muito comum e usa uma sequência numérica." }, { password: "M3u-C@ch0rr0-F0f1nh0!", isStrong: true, explanation: "Ótima! Usa maiúsculas, minúsculas, números e símbolos." }, { password: "julia2015", isStrong: false, explanation: "Fácil de adivinhar, contém um nome e um ano." }, { password: "C0mput@d0r_R0x_4ever", isStrong: true, explanation: "Excelente! Longa, complexa e difícil de adivinhar." } ];
+    let currentPasswordQuestionIndex = 0;
+
+    function startPasswordQuiz() {
+        currentPasswordQuestionIndex = 0;
+        document.getElementById('password-continue-btn').classList.add('hidden');
+        displayPasswordQuestion();
+    }
+
+    function displayPasswordQuestion() {
+        const quizContainer = document.getElementById('password-quiz');
+        const question = passwordQuestions[currentPasswordQuestionIndex];
+        quizContainer.innerHTML = `
+            <p class="text-center text-lg mb-4">A senha abaixo é <strong>forte</strong> ou <strong>fraca</strong>?</p>
+            <div class="my-4 p-3 bg-gray-200 rounded-lg text-center font-mono text-xl tracking-wider">${question.password}</div>
+            <div class="flex justify-center gap-4 mt-4">
+                <button class="quiz-option bg-green-500 hover:bg-green-600 text-white font-bold py-3 px-8 rounded-lg" onclick="checkPasswordAnswer(true)">Forte</button>
+                <button class="quiz-option bg-red-500 hover:bg-red-600 text-white font-bold py-3 px-8 rounded-lg" onclick="checkPasswordAnswer(false)">Fraca</button>
+            </div>
+        `;
+        document.getElementById('password-feedback').classList.add('hidden');
+        document.getElementById('gemini-password-tip').classList.add('hidden');
+        document.getElementById('next-password-btn').classList.add('hidden');
+        document.getElementById('gemini-tip-btn').classList.add('hidden');
+    }
+
+    function checkPasswordAnswer(userAnswer) {
+        const question = passwordQuestions[currentPasswordQuestionIndex];
+        const feedbackEl = document.getElementById('password-feedback');
+        const options = document.querySelectorAll('#password-quiz button');
+        options.forEach(btn => btn.disabled = true);
+
+        if (userAnswer === question.isStrong) {
+            feedbackEl.innerHTML = `Correto! ${question.explanation}`;
+            feedbackEl.className = 'mt-4 p-4 rounded-lg text-center font-bold text-lg bg-green-200 text-green-800 block';
+        } else {
+            feedbackEl.innerHTML = `Incorreto! ${question.explanation}`;
+            feedbackEl.className = 'mt-4 p-4 rounded-lg text-center font-bold text-lg bg-red-200 text-red-800 block';
+        }
+
+        document.getElementById('gemini-tip-btn').classList.remove('hidden');
+
+        if (currentPasswordQuestionIndex >= passwordQuestions.length - 1) {
+            document.getElementById('password-continue-btn').classList.remove('hidden');
+            document.getElementById('next-password-btn').classList.add('hidden');
+        } else {
+            document.getElementById('next-password-btn').classList.remove('hidden');
+        }
+    }
+    
+    async function getPasswordTip() { const tipBtn = document.getElementById('gemini-tip-btn'); const tipDiv = document.getElementById('gemini-password-tip'); tipBtn.disabled = true; tipDiv.innerHTML = '<div class="loader"></div>'; tipDiv.classList.remove('hidden'); const question = passwordQuestions[currentPasswordQuestionIndex]; const prompt = `Explique de forma simples e divertida para uma criança por que a senha "${question.password}" é considerada ${question.isStrong ? 'forte' : 'fraca'}. Use emojis.`; const tip = await geminiApiCall(prompt); tipDiv.innerHTML = tip.replace(/\n/g, '<br>'); tipBtn.disabled = false; }
+    
+    function nextPasswordQuestion() { currentPasswordQuestionIndex++; displayPasswordQuestion(); }
+
+    // Nuvem
+    const cloudQuestions = [ { question: "Qual a melhor forma de compartilhar um arquivo de trabalho escolar com seu grupo?", options: ["Deixar o link público para todos verem", "Criar um link de compartilhamento apenas para os e--mails do grupo", "Salvar no seu computador e não usar a nuvem"], correctAnswer: 1, explanation: "Compartilhar apenas com pessoas de confiança evita que estranhos acessem seus arquivos." }, { question: "Você recebeu um link para um arquivo na nuvem de um desconhecido. O que você faz?", options: ["Clico para ver o que é", "Pergunto para um adulto de confiança antes de clicar", "Baixo o arquivo imediatamente"], correctAnswer: 1, explanation: "Sempre desconfie de links e arquivos de desconhecidos. Peça ajuda a um adulto!" }, { question: "Qual é a melhor maneira de proteger sua conta na nuvem, além de uma senha forte?", options: ["Usar a mesma senha em todos os sites", "Anotar a senha em um papel ao lado do computador", "Ativar a Autenticação de Dois Fatores (2FA)"], correctAnswer: 2, explanation: "A 2FA é uma camada extra de segurança super importante para proteger suas contas!" } ];
+    let currentCloudQuestionIndex = 0;
+    
+    function startCloudQuiz() { currentCloudQuestionIndex = 0; document.getElementById('verifier-hero').classList.add('opacity-0'); displayCloudQuestion(); document.getElementById('cloud-continue-btn').classList.add('hidden'); }
+
+    function displayCloudQuestion() { const quizContainer = document.getElementById('cloud-quiz'); const question = cloudQuestions[currentCloudQuestionIndex]; let optionsHTML = ''; question.options.forEach((option, index) => { optionsHTML += `<button class="quiz-option w-full text-left p-4 my-2 bg-white border-2 border-gray-300 rounded-lg hover:bg-gray-100" onclick="checkCloudAnswer(${index})">${option}</button>`; }); quizContainer.innerHTML = `<h4 class="text-lg font-bold mb-4">${question.question}</h4>${optionsHTML}`; document.getElementById('cloud-feedback').classList.add('hidden'); document.getElementById('next-cloud-btn').classList.add('hidden'); }
+
+    function checkCloudAnswer(userAnswerIndex) { const question = cloudQuestions[currentCloudQuestionIndex]; const feedbackEl = document.getElementById('cloud-feedback'); const options = document.querySelectorAll('#cloud-quiz button'); options.forEach((btn, index) => { btn.disabled = true; if (index === question.correctAnswer) { btn.classList.add('correct'); } else if (index === userAnswerIndex) { btn.classList.add('incorrect'); } }); feedbackEl.textContent = question.explanation; feedbackEl.className = 'mt-4 p-4 rounded-lg text-center font-bold text-lg bg-sky-100 text-sky-800 block'; if (question.correctAnswer === 2 && userAnswerIndex === 2) { document.getElementById('verifier-hero').classList.remove('opacity-0'); } if (currentCloudQuestionIndex >= cloudQuestions.length - 1) { document.getElementById('cloud-continue-btn').classList.remove('hidden'); document.getElementById('next-cloud-btn').classList.add('hidden'); } else { document.getElementById('next-cloud-btn').classList.remove('hidden'); } }
+
+    function nextCloudQuestion() { currentCloudQuestionIndex++; displayCloudQuestion(); }
+
+    // --- INICIALIZAÇÃO ---
+    document.addEventListener('DOMContentLoaded', () => {
+        buildTrail();
+        populateContent();
+        showCurrentStep();
+    });
+    </script>
+</body>
+</html>
+

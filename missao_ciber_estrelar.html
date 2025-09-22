@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Missão Ciber-Estelar: Jogo Interativo</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bungee&family=Press+Start+2P&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Poppins', sans-serif; background-color: #0c0a1e; }
+        .font-bungee { font-family: 'Bungee', cursive; }
+        .font-pixel { font-family: '"Press Start 2P"', cursive; }
+
+        /* Estilo do Espaço */
+        #star-map {
+            background-image: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiPjxkZWZzPjxyYWRpYWxHcmFkaWVudCBpZD0iZ3JhZCIgZ3JhZGllbnRVbml0cz0idXNlclNwYWNlT25Vc2UiIGN4PSI1MCUiIGN5PSI1MCUiIHI9IjgwJSI+PHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iIzE0MTQzYyIvPjxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iIzBjMGExZSIvPjwvcmFkaWFsR3JhZGllbnQ+PC9kZWZzPjxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InVybCgjZ3JhZCkiLz48L3N2Zz4=');
+            background-size: cover;
+            position: relative;
+            overflow: hidden;
+        }
+
+        #player-ship {
+            transition: all 1.5s cubic-bezier(0.42, 0, 0.58, 1);
+            animation: ship-idle 4s ease-in-out infinite;
+        }
+
+        @keyframes ship-idle {
+            0%, 100% { transform: translateY(0) rotate(-45deg); }
+            50% { transform: translateY(-8px) rotate(-45deg); }
+        }
+        
+        @keyframes ship-damage {
+            0%, 100% { filter: brightness(1); }
+            50% { filter: brightness(3) drop-shadow(0 0 5px #ff0000); }
+        }
+        
+        .planet {
+            animation: planet-pulse 3s infinite ease-in-out;
+            cursor: pointer;
+        }
+        .planet.active-planet {
+             filter: drop-shadow(0 0 15px #0ea5e9);
+        }
+
+        @keyframes planet-pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        .challenge-modal {
+            background: rgba(12, 10, 30, 0.85);
+            backdrop-filter: blur(8px);
+            animation: modal-zoom-in 0.4s ease-out forwards;
+        }
+
+        @keyframes modal-zoom-in {
+            from { opacity: 0; transform: scale(0.7); }
+            to { opacity: 1; transform: scale(1); }
+        }
+        
+        .correct { animation: correct-pulse 0.5s forwards; border-color: #22c55e !important; }
+        .wrong { animation: wrong-shake 0.5s; border-color: #ef4444 !important; }
+        
+        @keyframes correct-pulse {
+            from { box-shadow: 0 0 0px #22c55e; }
+            to { box-shadow: 0 0 25px #22c55e; }
+        }
+        @keyframes wrong-shake {
+            0%, 100% { transform: translateX(0); } 10%, 50%, 90% { transform: translateX(-6px); } 30%, 70% { transform: translateX(6px); }
+        }
+    </style>
+</head>
+<body class="text-white flex items-center justify-center min-h-screen">
+
+    <div id="app-container" class="w-full h-screen p-4 flex flex-col items-center justify-center">
+
+        <!-- TELA INICIAL -->
+        <div id="start-screen" class="text-center">
+            <h1 class="font-bungee text-5xl md:text-6xl text-cyan-400 drop-shadow-[0_4px_4px_rgba(0,0,0,0.5)]">Missão Ciber-Estelar</h1>
+            <p class="mt-4 text-xl text-slate-300">Uma Aventura pela Galáxia Digital</p>
+            <button onclick="startGame()" class="mt-12 font-pixel bg-orange-500 hover:bg-orange-600 text-white py-4 px-8 rounded-lg text-xl shadow-lg transform hover:scale-105 transition-transform duration-300 animate-pulse">
+                INICIAR MISSÃO
+            </button>
+        </div>
+
+        <!-- TELA DO JOGO -->
+        <div id="game-screen" class="hidden w-full h-full flex flex-col items-center justify-center">
+            <!-- HUD -->
+            <div class="w-full max-w-6xl mb-4 flex justify-between font-pixel text-lg px-2">
+                <div>CRISTAIS: <span id="score">0</span></div>
+                <div>ESCUDOS: <span id="shields"></span></div>
+            </div>
+
+            <!-- Mapa Estelar -->
+            <div id="star-map" class="w-full max-w-6xl h-96 rounded-lg shadow-2xl border-4 border-indigo-900">
+                <!-- Planetas -->
+                <div id="planet-0" class="planet active-planet absolute top-[40%] left-[10%] text-5xl">🌎</div>
+                <div id="planet-1" class="planet absolute top-[60%] left-[30%] text-5xl">🪐</div>
+                <div id="planet-2" class="planet absolute top-[25%] left-[55%] text-5xl">☄️</div>
+                <div id="planet-3" class="planet absolute top-[50%] left-[80%] text-6xl">💎</div>
+                
+                <!-- Nave -->
+                <div id="player-ship" class="absolute top-[40%] left-[10%] text-5xl transform -rotate-45">🚀</div>
+            </div>
+             <p id="mission-log" class="font-pixel text-cyan-300 mt-4 h-6 text-center"></p>
+        </div>
+
+        <!-- MODAL DE DESAFIO -->
+        <div id="challenge-modal" class="hidden fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center p-4 z-50">
+            <div class="challenge-modal w-full max-w-3xl border-4 border-orange-400 rounded-lg p-8 text-center">
+                <h3 id="challenge-title" class="font-bungee text-3xl text-orange-300 mb-2"></h3>
+                <p class="text-slate-400 mb-6 font-pixel text-sm">TRANSMISSÃO DE ALERTA</p>
+                <p id="challenge-question" class="text-xl mb-8"></p>
+                <div id="challenge-choices" class="grid grid-cols-1 gap-4">
+                    <!-- Opções -->
+                </div>
+                <p id="challenge-feedback" class="mt-6 text-lg min-h-[3rem] font-semibold"></p>
+            </div>
+        </div>
+        
+        <!-- TELA FINAL -->
+        <div id="end-screen" class="hidden text-center p-4">
+             <h2 id="end-title" class="font-bungee text-6xl"></h2>
+             <p id="end-message" class="mt-4 text-2xl max-w-2xl"></p>
+             <p class="mt-8 font-pixel text-3xl">CRISTAIS FINAIS: <span id="final-score">0</span></p>
+             <div class="mt-10 inline-block bg-slate-800 border-2 border-orange-400 p-6 rounded-lg">
+                <h3 class="font-pixel text-2xl text-orange-300">Medalha de</h3>
+                <p class="font-bungee text-4xl mt-2">Honra Ciber-Estelar</p>
+             </div>
+             <button onclick="startGame()" class="mt-12 font-pixel bg-cyan-500 hover:bg-cyan-600 text-white py-3 px-6 rounded-lg text-lg">
+                JOGAR NOVAMENTE
+            </button>
+        </div>
+
+    </div>
+
+    <script>
+        const getEl = id => document.getElementById(id);
+        
+        const challenges = [
+            {
+                title: "Nebulosa do Phishing",
+                question: "Recebes uma mensagem do 'Imperador Zorg' a prometer um prémio. A mensagem tem erros de ortografia e um link estranho. É uma armadilha?",
+                choices: [ { text: "Sim, é Phishing! Apagar!", correct: true }, { text: "Não, vou clicar para ver o prémio.", correct: false } ],
+                explanation: "Correto! Mensagens inesperadas com links estranhos são perigosas.",
+                planet: getEl('planet-1'),
+                shipPosition: { top: '60%', left: '30%' }
+            },
+            {
+                title: "Cinturão de Malware",
+                question: "Para desviar dos asteroides, precisas de um novo software de navegação. Descarregas de uma 'Loja Pirata' ou da 'Loja Oficial da Frota Estelar'?",
+                choices: [ { text: "Da Loja Oficial, claro!", correct: true }, { text: "Da Loja Pirata, é mais rápido.", correct: false } ],
+                explanation: "Exato! Fontes não oficiais podem conter vírus (malware).",
+                planet: getEl('planet-2'),
+                shipPosition: { top: '25%', left: '55%' }
+            },
+            {
+                title: "O Buraco Negro das Senhas",
+                question: "Para a dobra espacial final, o computador pede a senha mestra. Qual é a mais forte para resistir à força do buraco negro?",
+                choices: [ { text: "estrela123", correct: false }, { text: "N@v3S3gur@!", correct: true }, { text: "password", correct: false } ],
+                explanation: "Perfeito! A combinação de letras, números e símbolos cria uma defesa poderosa.",
+                planet: getEl('planet-3'),
+                shipPosition: { top: '50%', left: '80%' }
+            }
+        ];
+
+        let state = {};
+
+        function initGameState() {
+            state = { level: 0, score: 0, shields: 3, gameOver: false };
+            getEl('player-ship').style.top = '40%';
+            getEl('player-ship').style.left = '10%';
+            document.querySelectorAll('.planet').forEach(p => p.classList.remove('active-planet'));
+            getEl('planet-0').classList.add('active-planet');
+        }
+
+        function startGame() {
+            initGameState();
+            updateHUD();
+            getEl('start-screen').classList.add('hidden');
+            getEl('end-screen').classList.add('hidden');
+            getEl('game-screen').classList.remove('hidden');
+            updateMissionLog("Missão iniciada! A viajar para o primeiro setor...");
+            setTimeout(travelToNextChallenge, 2000);
+        }
+
+        function travelToNextChallenge() {
+            if (state.level >= challenges.length) {
+                endGame(true); // Chegou ao fim
+                return;
+            }
+            const challenge = challenges[state.level];
+            const { top, left } = challenge.shipPosition;
+            const ship = getEl('player-ship');
+            ship.style.top = top;
+            ship.style.left = left;
+            
+            document.querySelectorAll('.planet').forEach(p => p.classList.remove('active-planet'));
+            challenge.planet.classList.add('active-planet');
+            
+            setTimeout(() => showChallenge(state.level), 1600); // Esperar a nave chegar
+        }
+
+        function showChallenge(level) {
+            updateMissionLog("");
+            const challenge = challenges[level];
+            getEl('challenge-title').textContent = challenge.title;
+            getEl('challenge-question').textContent = challenge.question;
+            const choicesContainer = getEl('challenge-choices');
+            choicesContainer.innerHTML = '';
+            challenge.choices.forEach(choice => {
+                const button = document.createElement('button');
+                button.className = "font-pixel text-lg p-4 border-2 border-slate-500 hover:bg-cyan-900 rounded-lg transition-colors duration-300";
+                button.textContent = choice.text;
+                button.onclick = () => selectAnswer(choice.correct, button);
+                choicesContainer.appendChild(button);
+            });
+            getEl('challenge-feedback').textContent = '';
+            getEl('challenge-modal').classList.remove('hidden');
+        }
+
+        function selectAnswer(isCorrect, button) {
+            getEl('challenge-choices').querySelectorAll('button').forEach(btn => btn.disabled = true);
+            const feedback = getEl('challenge-feedback');
+            const explanation = challenges[state.level].explanation;
+
+            if (isCorrect) {
+                state.score += 100;
+                button.classList.add('correct');
+                feedback.textContent = explanation;
+                feedback.className = "mt-6 text-lg min-h-[3rem] font-semibold text-green-400";
+            } else {
+                state.shields--;
+                button.classList.add('wrong');
+                feedback.textContent = "Cuidado! " + explanation.replace("Correto! ", "").replace("Exato! ", "").replace("Perfeito! ", "");
+                feedback.className = "mt-6 text-lg min-h-[3rem] font-semibold text-red-400";
+                
+                const ship = getEl('player-ship');
+                ship.style.animation = 'ship-damage 0.5s';
+                setTimeout(() => ship.style.animation = 'ship-idle 4s ease-in-out infinite', 500);
+
+                if (state.shields <= 0) {
+                    state.gameOver = true;
+                }
+            }
+            
+            updateHUD();
+            
+            setTimeout(() => {
+                getEl('challenge-modal').classList.add('hidden');
+                if (state.gameOver) {
+                    endGame(false);
+                } else {
+                    state.level++;
+                     if (state.level < challenges.length){
+                        updateMissionLog("Sistema seguro. A calcular rota para o próximo desafio...");
+                     } else {
+                        updateMissionLog("Navegando para o destino final...");
+                     }
+                    setTimeout(travelToNextChallenge, 1500);
+                }
+            }, 4000);
+        }
+        
+        function updateHUD() {
+            getEl('score').textContent = state.score;
+            getEl('shields').textContent = '🛡️'.repeat(state.shields);
+        }
+        
+        function updateMissionLog(message) {
+            const log = getEl('mission-log');
+            log.textContent = '';
+            let i = 0;
+            function type() {
+                if (i < message.length) {
+                    log.textContent += message.charAt(i);
+                    i++;
+                    setTimeout(type, 50);
+                }
+            }
+            type();
+        }
+
+        function endGame(isWinner) {
+            getEl('game-screen').classList.add('hidden');
+            getEl('end-screen').classList.remove('hidden');
+            
+            const title = getEl('end-title');
+            const message = getEl('end-message');
+            
+            if (isWinner) {
+                title.textContent = "MISSÃO CUMPRIDA!";
+                title.classList.add("text-green-400");
+                title.classList.remove("text-red-500");
+                message.textContent = "Chegaste ao teu destino em segurança e provaste ser um verdadeiro Explorador Ciber-Estelar!";
+            } else {
+                title.textContent = "MISSÃO FALHOU";
+                title.classList.add("text-red-500");
+                title.classList.remove("text-green-400");
+                message.textContent = "Os teus escudos falharam! Recarrega as energias e tenta novamente para proteger a galáxia digital.";
+            }
+            getEl('final-score').textContent = state.score;
+        }
+
+    </script>
+</body>
+</html>
+
